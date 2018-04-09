@@ -38,6 +38,11 @@
     "autoload-dev": {
         "psr-4": { "Composer\\Satis\\": "tests" }
     },
+    "scripts": {
+        "build": [
+            "@php bin/satis build satis.json build"
+        ]
+    },
     "config": {
         "platform": {
             "php": "7.0"
