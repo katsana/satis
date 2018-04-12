@@ -3,7 +3,8 @@
   "homepage": "http://satis.katsanalabs.com",
   "repositories": [
     { "type": "vcs", "url": "https://github.com/katsana/katsana-sdk-php" },
-    { "type": "vcs", "url": "https://gitlab.com/katsana/partner-sdk-php" }
+    { "type": "vcs", "url": "https://gitlab.com/katsana/partner-sdk-php" },
+    { "type": "vcs", "url": "https://github.com/katsana/core" }
   ],
   "require-all": true
 }
