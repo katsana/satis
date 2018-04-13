@@ -1,6 +1,6 @@
 {
   "name": "KATSANA Labs",
-  "homepage": "http://packages.katsanalabs.com",
+  "homepage": "https://packages.katsanalabs.com",
   "repositories": [
     { "type": "vcs", "url": "https://gitlab.com/katsana/partner-sdk-php" },
     { "type": "vcs", "url": "https://github.com/katsana/core" }
