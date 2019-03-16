@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of composer/satis.
  *
@@ -11,7 +13,8 @@
 
 namespace Composer\Satis\Builder;
 
-use Composer\Package\{Link, Package};
+use Composer\Package\Link;
+use Composer\Package\Package;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Output\NullOutput;
 

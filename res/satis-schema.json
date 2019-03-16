@@ -76,12 +76,25 @@
                 "ignore-filters": {
                     "type": "boolean",
                     "description": "Ignore filters when looking for files in the package."
+                },
+                "override-dist-type": {
+                    "type": "boolean",
+                    "description": "If true, archive format will be used to substitute dist type when generating archive file name."
+                },
+                "rearchive": {
+                    "type": "boolean",
+                    "description": "Create new archives for packages with a tar or zip dist, defaults to true"
                 }
             }
         },
         "repositories": {
             "type": ["object", "array"],
             "description": "A set of additional repositories where packages can be found.",
+            "additionalProperties": true
+        },
+        "repositories-dep": {
+            "type": ["object", "array"],
+            "description": "A set of additional repositories where packages for dependencies can be found.",
             "additionalProperties": true
         },
         "minimum-stability": {
@@ -109,6 +122,17 @@
             "type": "boolean",
             "description": "If true, resolve and add all Dev dependencies of each required package."
         },
+        "require-dependency-filter": {
+            "type": "boolean",
+            "description": "If false, will include all versions matching a dependency."
+        },
+        "strip-hosts": {
+            "type": ["array", "boolean"],
+            "description": "List of domains, IPs, CIDR notations, '/local' (=localnet and other reserved) or '/private' (=private IPs) to be stripped from the output. If set and non-false, local file paths are removed too.",
+            "items": {
+                "type": "string"
+            }
+        },
         "include-filename": {
             "type": "string",
             "description": "Specify filename instead of default include/all${SHA1_HASH}.json"
@@ -124,6 +148,10 @@
         "providers": {
             "type": "boolean",
             "description": "If true, dump package providers."
+        },
+        "providers-history-size": {
+            "type": "integer",
+            "description": "Optional integer to be used for keeping a number of files that would otherwise be pruned."
         },
         "twig-template": {
             "type": "string",
@@ -197,7 +225,7 @@
                 },
                 "cache-vcs-dir": {
                     "type": "string",
-                    "description": "The location where vcs infos (git clones, github api calls, etc. when reading vcs repos) are cached, defaults to \"{$cache-dir}/vcs\"."
+                    "description": "The location where vcs info (git clones, github api calls, etc. when reading vcs repos) are cached, defaults to \"{$cache-dir}/vcs\"."
                 },
                 "cache-ttl": {
                     "type": "integer",
@@ -256,6 +284,10 @@
         "_comment": {
             "type": ["array", "string"],
             "description": "A key to store comments in"
+        },
+        "pretty-print": {
+            "type": "boolean",
+            "description": "Defaults to true. When false, the JSON_PRETTY_PRINT option will not be used on encoding."
         }
     }
 }

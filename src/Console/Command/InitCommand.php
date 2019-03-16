@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of composer/satis.
  *
@@ -13,8 +15,11 @@ namespace Composer\Satis\Console\Command;
 
 use Composer\Command\BaseCommand;
 use Composer\Json\JsonFile;
-use Symfony\Component\Console\Helper\{FormatterHelper, QuestionHelper};
-use Symfony\Component\Console\Input\{InputArgument, InputInterface, InputOption};
+use Symfony\Component\Console\Helper\FormatterHelper;
+use Symfony\Component\Console\Helper\QuestionHelper;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
 

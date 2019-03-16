@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of composer/satis.
  *
@@ -11,8 +13,10 @@
 
 namespace Composer\Satis\Console;
 
-use Composer\{Composer, Factory};
-use Composer\IO\{ConsoleIO, IOInterface};
+use Composer\Composer;
+use Composer\Factory;
+use Composer\IO\ConsoleIO;
+use Composer\IO\IOInterface;
 use Composer\Satis\Console\Command;
 use Composer\Satis\Satis;
 use Composer\Util\ErrorHandler;

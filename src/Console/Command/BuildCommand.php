@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of composer/satis.
  *
@@ -14,15 +16,20 @@ namespace Composer\Satis\Console\Command;
 use Composer\Command\BaseCommand;
 use Composer\Config;
 use Composer\Config\JsonConfigSource;
-use Composer\Json\{JsonFile, JsonValidationException};
-use Composer\Satis\Builder\{ArchiveBuilder, PackagesBuilder, WebBuilder};
+use Composer\Json\JsonFile;
+use Composer\Json\JsonValidationException;
+use Composer\Satis\Builder\ArchiveBuilder;
+use Composer\Satis\Builder\PackagesBuilder;
+use Composer\Satis\Builder\WebBuilder;
 use Composer\Satis\Console\Application;
 use Composer\Satis\PackageSelection\PackageSelection;
 use Composer\Util\RemoteFilesystem;
 use JsonSchema\Validator;
 use Seld\JsonLint\JsonParser;
 use Seld\JsonLint\ParsingException;
-use Symfony\Component\Console\Input\{InputArgument, InputInterface, InputOption};
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -40,6 +47,7 @@ class BuildCommand extends BaseCommand
                 new InputArgument('output-dir', InputArgument::OPTIONAL, 'Location where to output built files', null),
                 new InputArgument('packages', InputArgument::IS_ARRAY | InputArgument::OPTIONAL, 'Packages that should be built. If not provided, all packages are built.', null),
                 new InputOption('repository-url', null, InputOption::VALUE_OPTIONAL, 'Only update the repository at given url', null),
+                new InputOption('repository-strict', null, InputOption::VALUE_NONE, 'Also apply the repository filter when resolving dependencies'),
                 new InputOption('no-html-output', null, InputOption::VALUE_NONE, 'Turn off HTML view'),
                 new InputOption('skip-errors', null, InputOption::VALUE_NONE, 'Skip Download or Archive errors'),
                 new InputOption('stats', null, InputOption::VALUE_NONE, 'Display the download progress bar'),
@@ -53,6 +61,7 @@ The json config file accepts the following keys:
 
 - <info>"repositories"</info>: defines which repositories are searched
   for packages.
+- <info>"repositories-dep"</info>: define additional repositories for dependencies
 - <info>"output-dir"</info>: where to output the repository files
   if not provided as an argument when calling build.
 - <info>"require-all"</info>: boolean, if true, all packages present
@@ -71,6 +80,8 @@ The json config file accepts the following keys:
   but requires dev requirements rather than regular ones.
 - <info>"config"</info>: all config options from composer, see
   http://getcomposer.org/doc/04-schema.md#config
+- <info>"strip-hosts"</info>: boolean or an array of domains, IPs, CIDR notations, '/local' (=localnet and other reserved)
+  or '/private' (=private IPs) to be stripped from the output. If set and non-false, local file paths are removed too.
 - <info>"output-html"</info>: boolean, controls whether the repository
   has an html page as well or not.
 - <info>"name"</info>: for html output, this defines the name of the
@@ -170,7 +181,7 @@ EOT
         $packageSelection = new PackageSelection($output, $outputDir, $config, $skipErrors);
 
         if (null !== $repositoryUrl) {
-            $packageSelection->setRepositoryFilter($repositoryUrl);
+            $packageSelection->setRepositoryFilter($repositoryUrl, (bool) $input->getOption('repository-strict'));
         } else {
             $packageSelection->setPackagesFilter($packagesFilter);
         }
@@ -183,6 +194,8 @@ EOT
             $downloads->setInput($input);
             $downloads->dump($packages);
         }
+
+        $packages = $packageSelection->clean();
 
         if ($packageSelection->hasFilterForPackages() || $packageSelection->hasRepositoryFilter()) {
             // in case of an active filter we need to load the dumped packages.json and merge the
